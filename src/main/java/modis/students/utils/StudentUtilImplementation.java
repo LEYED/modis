@@ -9,8 +9,8 @@ import java.util.Date;
  */
 public class StudentUtilImplementation implements StudentUtil {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    private static int YEARS_TO_FINISH_HIGH_SCHOOL = -12;
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static int YEARS_TO_FINISH_HIGH_SCHOOL = 12;
 
     @Override
     public int getGradeOnGivenDate(String highSchoolGradDate, String givenDate) throws Exception {
@@ -24,19 +24,15 @@ public class StudentUtilImplementation implements StudentUtil {
     }
 
     private int getGradeOnGivenDate(Calendar highSchoolGradCal, Calendar givenCal) {
-        Calendar firstDayOfSchool = Calendar.getInstance();
-        firstDayOfSchool.setTime(highSchoolGradCal.getTime());
-        firstDayOfSchool.add(Calendar.YEAR, YEARS_TO_FINISH_HIGH_SCHOOL);
-
-        int currentGrade = givenCal.get(Calendar.YEAR) - firstDayOfSchool.get(Calendar.YEAR);
+        int yearsDifference = (givenCal.get(Calendar.YEAR) - highSchoolGradCal.get(Calendar.YEAR));
+        int currentGrade = YEARS_TO_FINISH_HIGH_SCHOOL - yearsDifference;
         return getCurrentGradeWithBoundsIndicator(currentGrade, highSchoolGradCal, givenCal);
     }
 
     private int getCurrentGradeWithBoundsIndicator(int currentGrade, Calendar highSchoolGradCal, Calendar givenCal) {
         if(givenCal.after(highSchoolGradCal)){
             return 99;
-        }
-        if(currentGrade < 0){
+        }else if(currentGrade > YEARS_TO_FINISH_HIGH_SCHOOL){
             return -1;
         }else{
             return currentGrade;
